@@ -30,9 +30,8 @@
         <item><spacer name="s1"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
         <item>
          <widget class="QLabel" name="lblSelect">
-          <property name="text"><string>Select a text for the typing exercise:</string>
-          </property>
           <property name="font"><font><pointsize>12</pointsize></font></property>
+          <property name="text"><string>Select a text for the typing exercise:</string></property>
          </widget>
         </item>
         <item>
@@ -67,13 +66,13 @@
         <item>
          <layout class="QHBoxLayout" name="layoutStats">
           <item><spacer name="s5"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-          <item><widget class="QLabel" name="lblTime"><property name="text"><string>🕒 Time: 00:12</string></property></widget></item>
-          <item><widget class="QLabel" name="lblSpeed"><property name="text"><string>⌨ Speed: 76 CPM</string></property></widget></item>
-          <item><widget class="QLabel" name="lblAccuracy"><property name="text"><string>✅ Accuracy: 95%</string></property></widget></item>
+          <item><widget class="QLabel" name="lblTime"><property name="text"><string>🕒 Time: 00:00</string></property></widget></item>
+          <item><widget class="QLabel" name="lblSpeed"><property name="text"><string>⌨ Speed: 0 CPM</string></property></widget></item>
+          <item><widget class="QLabel" name="lblAccuracy"><property name="text"><string>✅ Accuracy: 100%</string></property></widget></item>
           <item>
            <widget class="QProgressBar" name="progressBar">
-            <property name="value"><number>75</number></property>
             <property name="maximumSize"><size><width>150</width><height>16</height></size></property>
+            <property name="value"><number>0</number></property>
             <property name="textVisible"><bool>false</bool></property>
            </widget>
           </item>
@@ -83,10 +82,11 @@
         <item>
          <widget class="QTextEdit" name="textDisplay">
           <property name="font"><font><family>Monospace</family><pointsize>16</pointsize></font></property>
-          <property name="html">
-           <string>&lt;p style=&quot;background-color: #fff9c4;&quot;&gt;&lt;/p&gt;&lt;p&gt; &lt;span style=&quot;background-color: #ffcdd2;&quot;&gt;&lt;/span&gt;&lt;/p&gt;</string>
-          </property
           <property name="readOnly"><bool>true</bool></property>
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;body&gt;&lt;p&gt;Text will appear here...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -107,6 +107,7 @@
          <widget class="QLabel" name="lblSessionTitle">
           <property name="font"><font><pointsize>18</pointsize></font></property>
           <property name="text"><string>Session Results</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
          </widget>
         </item>
         <item>
@@ -114,19 +115,25 @@
           <item>
            <widget class="QGroupBox" name="boxTime">
             <property name="title"><string>🕒 Time</string></property>
-            <layout class="QVBoxLayout"><item><widget class="QLabel" name="valTime"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>00:23</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout>
+            <layout class="QVBoxLayout">
+             <item><widget class="QLabel" name="valTime"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>00:00</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+            </layout>
            </widget>
           </item>
           <item>
            <widget class="QGroupBox" name="boxSpeed">
             <property name="title"><string>⌨ Speed</string></property>
-            <layout class="QVBoxLayout"><item><widget class="QLabel" name="valSpeed"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>82 CPM</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout>
+            <layout class="QVBoxLayout">
+             <item><widget class="QLabel" name="valSpeed"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>0 CPM</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+            </layout>
            </widget>
           </item>
           <item>
            <widget class="QGroupBox" name="boxAcc">
             <property name="title"><string>✅ Accuracy</string></property>
-            <layout class="QVBoxLayout"><item><widget class="QLabel" name="valAcc"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>91%</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item></layout>
+            <layout class="QVBoxLayout">
+             <item><widget class="QLabel" name="valAcc"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>0%</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+            </layout>
            </widget>
           </item>
          </layout>

@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.16)
-
 project(TypingTrainer VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
@@ -17,8 +16,9 @@ set(PROJECT_SOURCES
     mainwindow.cpp
     mainwindow.h
     mainwindow.ui
+    typingmodel.cpp
+    typingmodel.h
 )
 
 add_executable(TypingTrainer ${PROJECT_SOURCES})
-
 target_link_libraries(TypingTrainer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

@@ -2,13 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStringList>
+#include "typingmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -23,5 +24,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    TypingModel model;
+    QStringList lessons;
+    void setupKeyboard();
+    void updateDisplay();
+    void startLesson(int index);
 };
 #endif
