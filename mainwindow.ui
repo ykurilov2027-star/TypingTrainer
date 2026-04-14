@@ -11,142 +11,71 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Typing Trainer</string>
+   <string>Typing Trainer - ПР 6, 7, 8</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="mainLayout">
-    <property name="spacing"><number>0</number></property>
-    <property name="leftMargin"><number>0</number></property>
-    <property name="topMargin"><number>0</number></property>
-    <property name="rightMargin"><number>0</number></property>
-    <property name="bottomMargin"><number>0</number></property>
     <item>
      <widget class="QStackedWidget" name="stackScreens">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
       <widget class="QWidget" name="pageStart">
        <layout class="QVBoxLayout" name="layoutStart">
-        <property name="spacing"><number>25</number></property>
-        <property name="leftMargin"><number>50</number></property>
-        <property name="rightMargin"><number>50</number></property>
         <item><spacer name="s1"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
         <item>
          <widget class="QLabel" name="lblSelect">
-          <property name="font"><font><pointsize>12</pointsize></font></property>
-          <property name="text"><string>Select a text for the typing exercise:</string></property>
+          <property name="font"><font><pointsize>14</pointsize></font></property>
+          <property name="text"><string>Оберіть текст або файл для тренування:</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
          </widget>
         </item>
         <item>
          <widget class="QComboBox" name="comboLesson">
-          <property name="minimumSize"><size><width>0</width><height>35</height></size></property>
-          <item><property name="text"><string>Starter Text</string></property></item>
-          <item><property name="text"><string>Numbers and Symbols</string></property></item>
-          <item><property name="text"><string>Common Words Part 1</string></property></item>
-          <item><property name="text"><string>Common Words Part 2</string></property></item>
-          <item><property name="text"><string>Python Code Sample</string></property></item>
-          <item><property name="text"><string>Lorem ipsum</string></property></item>
+          <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout">
-          <item><spacer name="s2"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-          <item>
-           <widget class="QPushButton" name="btnStartTraining">
-            <property name="minimumSize"><size><width>220</width><height>45</height></size></property>
-            <property name="text"><string>Start Training</string></property>
-           </widget>
-          </item>
-          <item><spacer name="s3"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-         </layout>
+         <widget class="QPushButton" name="btnStartTraining">
+          <property name="minimumSize"><size><width>200</width><height>50</height></size></property>
+          <property name="text"><string>START TRAINING</string></property>
+          <property name="styleSheet"><string>font-weight: bold; background-color: #4CAF50; color: white;</string></property>
+         </widget>
         </item>
-        <item><spacer name="s4"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+        <item><spacer name="s2"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
        </layout>
       </widget>
       <widget class="QWidget" name="pageTraining">
        <layout class="QVBoxLayout" name="layoutTraining">
-        <property name="spacing"><number>15</number></property>
         <item>
          <layout class="QHBoxLayout" name="layoutStats">
-          <item><spacer name="s5"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-          <item><widget class="QLabel" name="lblTime"><property name="text"><string>🕒 Time: 00:00</string></property></widget></item>
-          <item><widget class="QLabel" name="lblSpeed"><property name="text"><string>⌨ Speed: 0 CPM</string></property></widget></item>
-          <item><widget class="QLabel" name="lblAccuracy"><property name="text"><string>✅ Accuracy: 100%</string></property></widget></item>
-          <item>
-           <widget class="QProgressBar" name="progressBar">
-            <property name="maximumSize"><size><width>150</width><height>16</height></size></property>
-            <property name="value"><number>0</number></property>
-            <property name="textVisible"><bool>false</bool></property>
-           </widget>
-          </item>
-          <item><spacer name="s6"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+          <item><widget class="QProgressBar" name="progressBar">
+           <property name="value"><number>0</number></property>
+           <property name="textVisible"><bool>false</bool></property>
+          </widget></item>
          </layout>
         </item>
         <item>
          <widget class="QTextEdit" name="textDisplay">
-          <property name="font"><font><family>Monospace</family><pointsize>16</pointsize></font></property>
+          <property name="font"><font><family>Monospace</family><pointsize>18</pointsize></font></property>
           <property name="readOnly"><bool>true</bool></property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;body&gt;&lt;p&gt;Text will appear here...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="QFrame" name="keyboardFrame">
           <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
-          <layout class="QGridLayout" name="gridLayoutKeyboard">
-           <property name="spacing"><number>4</number></property>
-          </layout>
+          <layout class="QGridLayout" name="gridLayoutKeyboard"/>
          </widget>
         </item>
        </layout>
       </widget>
       <widget class="QWidget" name="pageResults">
        <layout class="QVBoxLayout" name="layoutResults">
-        <property name="spacing"><number>30</number></property>
-        <item><spacer name="s7"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
-        <item>
-         <widget class="QLabel" name="lblSessionTitle">
-          <property name="font"><font><pointsize>18</pointsize></font></property>
-          <property name="text"><string>Session Results</string></property>
-          <property name="alignment"><set>Qt::AlignCenter</set></property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="layoutResBlocks">
-          <item>
-           <widget class="QGroupBox" name="boxTime">
-            <property name="title"><string>🕒 Time</string></property>
-            <layout class="QVBoxLayout">
-             <item><widget class="QLabel" name="valTime"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>00:00</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="boxSpeed">
-            <property name="title"><string>⌨ Speed</string></property>
-            <layout class="QVBoxLayout">
-             <item><widget class="QLabel" name="valSpeed"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>0 CPM</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="boxAcc">
-            <property name="title"><string>✅ Accuracy</string></property>
-            <layout class="QVBoxLayout">
-             <item><widget class="QLabel" name="valAcc"><property name="font"><font><pointsize>16</pointsize></font></property><property name="text"><string>0%</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout">
-          <item><spacer name="s8"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-          <item><widget class="QPushButton" name="btnRestart"><property name="minimumSize"><size><width>180</width><height>40</height></size></property><property name="text"><string>Restart Training</string></property></widget></item>
-          <item><widget class="QPushButton" name="btnReturnToMain"><property name="minimumSize"><size><width>180</width><height>40</height></size></property><property name="text"><string>Return to Main</string></property></widget></item>
-          <item><spacer name="s9"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-         </layout>
-        </item>
-        <item><spacer name="s10"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+        <item><spacer name="s3"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+        <item><widget class="QLabel" name="lblFinish"><property name="text"><string>Вітаємо! Вправу завершено.</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+        <item><widget class="QPushButton" name="btnRestart"><property name="text"><string>Спробувати знову</string></property></widget></item>
+        <item><widget class="QPushButton" name="btnReturnToMain"><property name="text"><string>В головне меню</string></property></widget></item>
+        <item><spacer name="s4"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
        </layout>
       </widget>
      </widget>
@@ -154,10 +83,8 @@
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
-   <widget class="QMenu" name="menuFile"><property name="title"><string>File</string></property><addaction name="actionExit"/></widget>
-   <widget class="QMenu" name="menuSettings"><property name="title"><string>Settings</string></property></widget>
-   <widget class="QMenu" name="menuHelp"><property name="title"><string>Help</string></property></widget>
+   <widget class="QMenu" name="menuFile"><property name="title"><string>Файл</string></property><addaction name="actionExit"/></widget>
   </widget>
-  <action name="actionExit"><property name="text"><string>Exit</string></property></action>
+  <action name="actionExit"><property name="text"><string>Вихід</string></property></action>
  </widget>
 </ui>

@@ -6,9 +6,7 @@ void TypingModel::setText(const QString &text) {
 }
 
 void TypingModel::advance() {
-    if (currentIndex < fullText.size()) {
-        currentIndex++;
-    }
+    if (currentIndex < fullText.size()) currentIndex++;
 }
 
 int TypingModel::getProgress() const {

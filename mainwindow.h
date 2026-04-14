@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDir>
 #include <QStringList>
 #include "typingmodel.h"
 
@@ -17,7 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_btnStartTraining_clicked();
+    void on_btnStartTraining_clicked(); // Ця назва має бути точно як в UI
     void on_btnRestart_clicked();
     void on_btnReturnToMain_clicked();
     void on_actionExit_triggered();
@@ -25,9 +26,10 @@ private slots:
 private:
     Ui::MainWindow *ui;
     TypingModel model;
-    QStringList lessons;
+
     void setupKeyboard();
     void updateDisplay();
-    void startLesson(int index);
+    void loadLessonsList();
+    void loadFileContent(const QString &fileName);
 };
 #endif

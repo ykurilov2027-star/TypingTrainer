@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPushButton>
+#include <QFile>
+#include <QTextStream>
+#include <QRandomGenerator>
+#include <QDebug> // Для перевірки роботи
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -8,11 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->stackScreens->setCurrentIndex(0);
 
-    lessons << "jfj j jff ffjjjj fjjf"
-            << "The quick brown fox jumps over the lazy dog"
-            << "int main() { return 0; }"
-            << "1234 5678 !@#$ %^&*";
-
+    loadLessonsList();
     setupKeyboard();
 }
 
@@ -20,12 +20,80 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::loadLessonsList() {
+    ui->comboLesson->clear();
+    ui->comboLesson->addItem("--- Випадковий урок ---");
+
+    // Шлях до папки з уроками
+    QDir dir(QDir::currentPath() + "/lessons");
+    if (!dir.exists()) {
+        dir.mkpath(".");
+        qDebug() << "Папка lessons створена за шляхом:" << dir.absolutePath();
+    }
+
+    QStringList files = dir.entryList({"*.txt"}, QDir::Files);
+    ui->comboLesson->addItems(files);
+}
+
+void MainWindow::loadFileContent(const QString &fileName) {
+    QFile file(QDir::currentPath() + "/lessons/" + fileName);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        model.setText(in.readAll().trimmed());
+        file.close();
+    } else {
+        qDebug() << "Не вдалося відкрити файл:" << fileName;
+    }
+}
+
+// ГОЛОВНА КНОПКА
+void MainWindow::on_btnStartTraining_clicked() {
+    qDebug() << "Button Start Clicked!"; // Якщо бачиш це в консолі - кнопка підключена!
+
+    int currentIndex = ui->comboLesson->currentIndex();
+    int count = ui->comboLesson->count();
+    QString selectedFile;
+
+    if (currentIndex == 0) { // Випадковий вибір
+        if (count > 1) {
+            int randomIdx = QRandomGenerator::global()->bounded(1, count);
+            selectedFile = ui->comboLesson->itemText(randomIdx);
+        } else {
+            qDebug() << "Файлів .txt не знайдено в папці /lessons/";
+            return;
+        }
+    } else {
+        selectedFile = ui->comboLesson->currentText();
+    }
+
+    if (!selectedFile.isEmpty()) {
+        loadFileContent(selectedFile);
+        updateDisplay();
+        ui->stackScreens->setCurrentIndex(1); // Перехід на екран тренування
+    }
+}
+
+void MainWindow::updateDisplay() {
+    QString typed = model.getTypedText();
+    QString remaining = model.getRemainingText();
+
+    QString html = QString("<span style='color: #4CAF50;'>%1</span>"
+                           "<span style='background-color: #FFF59D;'>%2</span>"
+                           "<span style='color: #9E9E9E;'>%3</span>")
+                       .arg(typed, remaining.left(1), remaining.mid(1));
+
+    ui->textDisplay->setHtml(html);
+    ui->progressBar->setValue(model.getProgress());
+
+    if (model.isFinished()) ui->stackScreens->setCurrentIndex(2);
+}
+
 void MainWindow::setupKeyboard() {
+    // Твій код генерації клавіш...
     auto addRow = [&](int row, const std::vector<QString>& keys) {
         for (int i = 0; i < (int)keys.size(); ++i) {
             QPushButton* btn = new QPushButton(keys[i]);
             btn->setMinimumSize(40, 40);
-            if (keys[i] == "Space") btn->setMinimumWidth(250);
             ui->gridLayoutKeyboard->addWidget(btn, row, i);
         }
     };
@@ -35,43 +103,6 @@ void MainWindow::setupKeyboard() {
     addRow(3, {"Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"});
 }
 
-void MainWindow::startLesson(int index) {
-    if (index >= 0 && index < lessons.size()) {
-        model.setText(lessons.at(index));
-        updateDisplay();
-    }
-}
-
-void MainWindow::updateDisplay() {
-    QString typed = model.getTypedText();
-    QString remaining = model.getRemainingText();
-
-    QString html = QString("<span style='color: green;'>%1</span>"
-                           "<span style='background-color: yellow;'>%2</span>"
-                           "<span>%3</span>")
-                       .arg(typed, remaining.left(1), remaining.mid(1));
-
-    ui->textDisplay->setHtml(html);
-    ui->progressBar->setValue(model.getProgress());
-
-    if (model.isFinished()) {
-        ui->stackScreens->setCurrentIndex(2);
-    }
-}
-
-void MainWindow::on_btnStartTraining_clicked() {
-    startLesson(ui->comboLesson->currentIndex());
-    ui->stackScreens->setCurrentIndex(1);
-}
-
-void MainWindow::on_btnRestart_clicked() {
-    startLesson(ui->comboLesson->currentIndex());
-}
-
-void MainWindow::on_btnReturnToMain_clicked() {
-    ui->stackScreens->setCurrentIndex(0);
-}
-
-void MainWindow::on_actionExit_triggered() {
-    close();
-}
+void MainWindow::on_btnRestart_clicked() { on_btnStartTraining_clicked(); }
+void MainWindow::on_btnReturnToMain_clicked() { ui->stackScreens->setCurrentIndex(0); }
+void MainWindow::on_actionExit_triggered() { close(); }
