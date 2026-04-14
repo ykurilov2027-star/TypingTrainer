@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QDir>
-#include <QStringList>
+#include <QKeyEvent>
 #include "typingmodel.h"
 
 QT_BEGIN_NAMESPACE
@@ -17,8 +17,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+
+    void keyPressEvent(QKeyEvent *event) override;
+
 private slots:
-    void on_btnStartTraining_clicked(); // Ця назва має бути точно як в UI
+    void on_btnStartTraining_clicked();
     void on_btnRestart_clicked();
     void on_btnReturnToMain_clicked();
     void on_actionExit_triggered();
@@ -31,5 +35,8 @@ private:
     void updateDisplay();
     void loadLessonsList();
     void loadFileContent(const QString &fileName);
+
+
+    void highlightKey(const QString &keyText);
 };
 #endif

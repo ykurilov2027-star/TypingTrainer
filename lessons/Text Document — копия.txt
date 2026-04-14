@@ -1,0 +1,8 @@
+  if c == "1": self.room_guard()
+            elif c == "2": self.room_student()
+            elif c == "3": self.room_med()
+            elif c == "4": self.room_hall()
+            elif c == "5": self.room_library()
+            elif c == "6": self.room_canteen()
+            elif c == "7": self.room_shower()
+            elif c == "8":
