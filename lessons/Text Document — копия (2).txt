@@ -1,3 +1,0 @@
-
-    def room_library(self):
-        self.visited_rooms.add("library")

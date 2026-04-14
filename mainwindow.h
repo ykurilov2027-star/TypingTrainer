@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QDir>
 #include <QKeyEvent>
+#include <QTimer>
+#include <QSettings>
 #include "typingmodel.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,7 +20,6 @@ public:
     ~MainWindow();
 
 protected:
-
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
@@ -26,17 +27,20 @@ private slots:
     void on_btnRestart_clicked();
     void on_btnReturnToMain_clicked();
     void on_actionExit_triggered();
+    void updateTimer();
 
 private:
     Ui::MainWindow *ui;
     TypingModel model;
+    QTimer *trainingTimer;
+    int secondsElapsed;
 
     void setupKeyboard();
     void updateDisplay();
     void loadLessonsList();
     void loadFileContent(const QString &fileName);
-
-
     void highlightKey(const QString &keyText);
+    void saveSettings();
+    void loadSettings();
 };
 #endif

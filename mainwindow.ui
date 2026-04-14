@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Typing Trainer - ПР 6, 7, 8</string>
+   <string>Typing Trainer - ПР 10</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="mainLayout">
@@ -49,10 +49,19 @@
        <layout class="QVBoxLayout" name="layoutTraining">
         <item>
          <layout class="QHBoxLayout" name="layoutStats">
-          <item><widget class="QProgressBar" name="progressBar">
-           <property name="value"><number>0</number></property>
-           <property name="textVisible"><bool>false</bool></property>
-          </widget></item>
+          <item>
+           <widget class="QLabel" name="lblLiveStats">
+            <property name="text">
+             <string>Час: 0с | Помилок: 0 | Точність: 100%</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value"><number>0</number></property>
+            <property name="textVisible"><bool>false</bool></property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -72,7 +81,20 @@
       <widget class="QWidget" name="pageResults">
        <layout class="QVBoxLayout" name="layoutResults">
         <item><spacer name="s3"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
-        <item><widget class="QLabel" name="lblFinish"><property name="text"><string>Вітаємо! Вправу завершено.</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+        <item>
+         <widget class="QLabel" name="lblFinish">
+          <property name="font"><font><pointsize>16</pointsize><bold>true</bold></font></property>
+          <property name="text"><string>Вітаємо! Вправу завершено.</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblFinalStats">
+          <property name="font"><font><pointsize>12</pointsize></font></property>
+          <property name="text"><string>Ваш результат завантажується...</string></property>
+          <property name="alignment"><set>Qt::AlignCenter</set></property>
+         </widget>
+        </item>
         <item><widget class="QPushButton" name="btnRestart"><property name="text"><string>Спробувати знову</string></property></widget></item>
         <item><widget class="QPushButton" name="btnReturnToMain"><property name="text"><string>В головне меню</string></property></widget></item>
         <item><spacer name="s4"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>

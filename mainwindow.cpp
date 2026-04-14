@@ -4,21 +4,26 @@
 #include <QFile>
 #include <QTextStream>
 #include <QRandomGenerator>
-#include <QKeyEvent>
 #include <QDebug>
-#include <QTimer>
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->stackScreens->setCurrentIndex(0);
+
+    trainingTimer = new QTimer(this);
+    connect(trainingTimer, &QTimer::timeout, this, &MainWindow::updateTimer);
+
     loadLessonsList();
+    loadSettings();
     setupKeyboard();
+
+    ui->stackScreens->setCurrentIndex(0);
     this->setFocusPolicy(Qt::StrongFocus);
 }
 
 MainWindow::~MainWindow() {
+    saveSettings();
     delete ui;
 }
 
@@ -26,10 +31,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if (ui->stackScreens->currentIndex() != 1) return;
 
     QString enteredText = event->text();
-    if (event->key() == Qt::Key_Space) {
-        enteredText = " ";
-    }
-
+    if (event->key() == Qt::Key_Space) enteredText = " ";
     if (enteredText.isEmpty()) return;
 
     QString expectedText = model.getRemainingText().left(1);
@@ -37,27 +39,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if (enteredText == expectedText) {
         model.advance();
         updateDisplay();
-
-        if (enteredText == " ") {
-            highlightKey("Space");
-        } else {
-            highlightKey(enteredText.toUpper());
-        }
+        highlightKey(enteredText == " " ? "Space" : enteredText.toUpper());
     } else {
-        qDebug() << "Error! Expected:" << expectedText << "Pressed:" << enteredText;
-    }
-}
-
-void MainWindow::highlightKey(const QString &keyText) {
-    for (int i = 0; i < ui->gridLayoutKeyboard->count(); ++i) {
-        QPushButton *btn = qobject_cast<QPushButton*>(ui->gridLayoutKeyboard->itemAt(i)->widget());
-        if (btn && btn->text() == keyText) {
-            btn->setStyleSheet("background-color: #81C784; color: white;");
-            QTimer::singleShot(100, [btn]() {
-                btn->setStyleSheet("");
-            });
-            break;
-        }
+        model.addError();
+        updateDisplay();
     }
 }
 
@@ -66,6 +51,13 @@ void MainWindow::updateDisplay() {
     QString remaining = model.getRemainingText();
 
     if (remaining.isEmpty() && !typed.isEmpty()) {
+        trainingTimer->stop();
+        if (ui->lblFinalStats) {
+            ui->lblFinalStats->setText(QString("Помилок: %1 | Точність: %2% | Швидкість: %3 CPM")
+                                           .arg(model.getErrors())
+                                           .arg(model.getAccuracy(), 0, 'f', 1)
+                                           .arg(model.getCPM(secondsElapsed)));
+        }
         ui->stackScreens->setCurrentIndex(2);
         return;
     }
@@ -80,6 +72,65 @@ void MainWindow::updateDisplay() {
 
     ui->textDisplay->setHtml(html);
     ui->progressBar->setValue(model.getProgress());
+
+    if (ui->lblLiveStats) {
+        ui->lblLiveStats->setText(QString("Час: %1с | Помилок: %2 | Точність: %3%")
+                                      .arg(secondsElapsed)
+                                      .arg(model.getErrors())
+                                      .arg(model.getAccuracy(), 0, 'f', 1));
+    }
+}
+
+void MainWindow::updateTimer() {
+    secondsElapsed++;
+    if (ui->lblLiveStats) {
+        ui->lblLiveStats->setText(QString("Час: %1с | Помилок: %2 | Точність: %3%")
+                                      .arg(secondsElapsed)
+                                      .arg(model.getErrors())
+                                      .arg(model.getAccuracy(), 0, 'f', 1));
+    }
+}
+
+void MainWindow::on_btnStartTraining_clicked() {
+    QString selected = ui->comboLesson->currentText();
+    if (ui->comboLesson->currentIndex() == 0 && ui->comboLesson->count() > 1) {
+        int idx = QRandomGenerator::global()->bounded(1, ui->comboLesson->count());
+        selected = ui->comboLesson->itemText(idx);
+    }
+
+    if (!selected.isEmpty() && selected != "--- Випадковий урок ---") {
+        loadFileContent(selected);
+        secondsElapsed = 0;
+        updateDisplay();
+        ui->stackScreens->setCurrentIndex(1);
+        trainingTimer->start(1000);
+
+        this->setFocus();
+        this->activateWindow();
+    }
+}
+
+void MainWindow::loadSettings() {
+    QSettings settings("Academy", "TypingTrainer");
+    QString lastFile = settings.value("lastFile", "").toString();
+    int index = ui->comboLesson->findText(lastFile);
+    if (index != -1) ui->comboLesson->setCurrentIndex(index);
+}
+
+void MainWindow::saveSettings() {
+    QSettings settings("Academy", "TypingTrainer");
+    settings.setValue("lastFile", ui->comboLesson->currentText());
+}
+
+void MainWindow::highlightKey(const QString &keyText) {
+    for (int i = 0; i < ui->gridLayoutKeyboard->count(); ++i) {
+        QPushButton *btn = qobject_cast<QPushButton*>(ui->gridLayoutKeyboard->itemAt(i)->widget());
+        if (btn && btn->text() == keyText) {
+            btn->setStyleSheet("background-color: #81C784; color: white;");
+            QTimer::singleShot(100, [btn]() { btn->setStyleSheet(""); });
+            break;
+        }
+    }
 }
 
 void MainWindow::loadLessonsList() {
@@ -87,8 +138,7 @@ void MainWindow::loadLessonsList() {
     ui->comboLesson->addItem("--- Випадковий урок ---");
     QDir dir(QDir::currentPath() + "/lessons");
     if (!dir.exists()) dir.mkpath(".");
-    QStringList files = dir.entryList({"*.txt"}, QDir::Files);
-    ui->comboLesson->addItems(files);
+    ui->comboLesson->addItems(dir.entryList({"*.txt"}, QDir::Files));
 }
 
 void MainWindow::loadFileContent(const QString &fileName) {
@@ -115,23 +165,6 @@ void MainWindow::setupKeyboard() {
     addRow(2, {"A", "S", "D", "F", "G", "H", "J", "K", "L", ";"});
     addRow(3, {"Z", "X", "C", "V", "B", "N", "M", ",", ".", "/"});
     addRow(4, {"Space"});
-}
-
-void MainWindow::on_btnStartTraining_clicked() {
-    QString selected;
-    if (ui->comboLesson->currentIndex() == 0 && ui->comboLesson->count() > 1) {
-        int randomIdx = QRandomGenerator::global()->bounded(1, ui->comboLesson->count());
-        selected = ui->comboLesson->itemText(randomIdx);
-    } else {
-        selected = ui->comboLesson->currentText();
-    }
-
-    if (!selected.isEmpty() && selected != "--- Випадковий урок ---") {
-        loadFileContent(selected);
-        updateDisplay();
-        ui->stackScreens->setCurrentIndex(1);
-        this->setFocus();
-    }
 }
 
 void MainWindow::on_btnRestart_clicked() { on_btnStartTraining_clicked(); }

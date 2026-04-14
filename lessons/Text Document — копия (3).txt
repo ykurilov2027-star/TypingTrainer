@@ -1,2 +1,0 @@
-def room_hall(self):
-        self.visited_rooms.add("hall")
